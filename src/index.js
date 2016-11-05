@@ -4,52 +4,46 @@
  * 
  * A tiny data flow controller.
  */
+import typeDetective from './util.type-detective'
+import DataItem from './class.data-item'
+import defineAccessor from './util.define-accessor'
 
 // Object to store data.
 const ITEMSTORE = {}
 const COLLECTIONSTEORE = {}
 
 /**
- * Standalone data item class.
- * 
- * @class DataItem
+ * FlowData main Object.
  */
-class DataItem {
-  constructor (itemName = '', value) {
+const FlowData = {
+  // Create new item.
+  createItem (itemName = '', value = null) {
     // If ITEMSTORE[itemName] is existing, return false.
     if (ITEMSTORE[itemName] !== undefined) {
       return false
     }
 
-    // Define this.value by using accessor.
-    var _value = value
-    Object.defineProperty(this, 'value', {
-      get () { return _value },
-      set (newVal) { _value = newVal }
-    })
+    // Object for storing data.
+    var _newObj = new DataItem(itemName)
 
-    // Register this dataItem to itemStore.
-    this.$id = itemName    
-    ITEMSTORE[itemName] = this
-  }
+    // Plain the object.
+    if (typeDetective(value) === 'Object') {
+      Object.keys(value).forEach(key => {
+        _newObj = defineAccessor(_newObj, key, value[key])
+      })
+    } else {
+      _newObj = defineAccessor(_newObj, itemName, value)
+    }
 
-  /**
-   * Update value.
-   * 
-   * @param { any } newVal
-   * @returns { boolean }
-   */
-  update (newVal) {
-    if (newVal === undefined) { return false }
-    this.value = newVal
-    return this
-  }
-}
+    // Create _dataObj by using Object.create.
+    const _dataObj = Object.create(_newObj)
+    
+    // Store object to ITEMSTORE by using Object.create.    
+    ITEMSTORE[itemName] = _dataObj
 
+    return _dataObj
 
-const FlowData = {
-  // FlowData.item set to Class DataItem {}.
-  item: DataItem,
+  },
 
   /**
    * Get a data that has been defined before.
@@ -82,4 +76,5 @@ const FlowData = {
   }
 }
 
+window.FlowData = FlowData
 export default FlowData

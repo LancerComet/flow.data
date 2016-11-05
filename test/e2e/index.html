@@ -1,0 +1,53 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Test</title>
+  </head>
+
+  <body>
+
+    <div ms-controller="testCtrl">
+      <p>name: {{name}}</p>
+      <p>age: {{age}}</p>
+    </div>
+
+    <script src="http://cdn.bootcss.com/avalon.js/1.5.5/avalon.min.js"></script>
+    <script src="../../dist/flow.min.js"></script>
+    <script>
+
+      var testCtrl = avalon.define({
+        $id: "testCtrl",
+        name: '--',
+        age: '--'
+      })
+
+      var info = FlowData.createItem('info', {
+        name: 'LancerComet', age: 26
+      })
+
+      console.info('info: ', info)
+
+      info.subscribe('name', function (newVal) {
+        console.warn('name has been changed: ', newVal)
+        testCtrl.name = newVal
+      })
+
+      info.subscribe('age', function (newVal) {
+        console.warn('age has been changed: ', newVal)
+        testCtrl.age = newVal
+      })
+
+      info.subscribe('name', function (newVal) {
+        console.warn('second name subscriber!', newVal)
+      })
+
+      var myName = FlowData.createItem('myName', 'LancerComet')
+      console.info('myName: ', myName)
+
+      myName.subscribe('myName', function (newVal) {
+        console.warn('myName newVal: ', newVal)
+      })
+
+    </script>
+  </body>
+</html>
