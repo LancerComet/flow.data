@@ -26,6 +26,10 @@ info.age = 10000
 
 info.update('name', 'John Smith')
 info.update('age', 20000)
+
+// You can get a flow item by using Flow.getItem()
+const info = FlowData.getItem('info')
+// Do something else ...
 ```
 
 
