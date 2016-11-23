@@ -7,19 +7,13 @@
   <body>
 
     <div ms-controller="testCtrl">
-      <p>name: {{name}}</p>
-      <p>age: {{age}}</p>
+      <p>name: {{info.name}}</p>
+      <p>age: {{info.age}}</p>
     </div>
 
     <script src="http://cdn.bootcss.com/avalon.js/1.5.5/avalon.min.js"></script>
     <script src="../../dist/flow.min.js"></script>
     <script>
-
-      var testCtrl = avalon.define({
-        $id: "testCtrl",
-        name: '--',
-        age: '--'
-      })
 
       var info = FlowData.createItem('info', {
         name: 'LancerComet', age: 26
@@ -46,6 +40,11 @@
 
       myName.subscribe('myName', function (newVal) {
         console.warn('myName newVal: ', newVal)
+      })
+
+      var testCtrl = avalon.define({
+        $id: "testCtrl",
+        info: info
       })
 
     </script>
