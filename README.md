@@ -23,6 +23,9 @@ info.subscribe('age', function (newVal) {
 // Both methods are ok.
 info.name = 'John Hathway'
 info.age = 10000
+
+info.update('name', 'John Smith')
+info.update('age', 20000)
 ```
 
 
